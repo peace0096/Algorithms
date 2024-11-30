@@ -1,63 +1,66 @@
-#include <vector>
 #include <iostream>
-#include <algorithm>
-#include <stack>
-#include <string>
+#include <vector>
 #include <queue>
-#include <map>
-#include <cstring>
+#include <stack>
+#include <algorithm>
 using namespace std;
+
+int n;
+queue<char> ans;
 
 int main()
 {
-	int n;
-	cin >> n;
+    ios::sync_with_stdio(0);
+    cin.tie(0);
 
-	int cur = 1;
-	stack<int> s;
-	vector<char> vec;
+    cin >> n;
 
-	for (int i = 0; i < n; i++)
-	{
-		int x;
-		cin >> x;
-		if (s.empty())
-		{
-			int count = x - cur + 1;
-			for (int j = 0; j < count; j++)
-			{
-				s.push(cur++);
-				vec.push_back('+');
-			}
-			s.pop();
-			vec.push_back('-');
-		}
-		else if (s.top() < x)
-		{
-			int count = x - cur + 1;
-			for (int j = 0; j < count; j++)
-			{
-				s.push(cur++);
-				vec.push_back('+');
-			}
-			s.pop();
-			vec.push_back('-');
-		}
-		else if (s.top() == x)
-		{
-			s.pop();
-			vec.push_back('-');
-		}
-		else
-		{
-			cout << "NO" << '\n';
-			return 0;
-		}
-	}
-	
-	for (int i = 0; i < vec.size(); i++)
-	{
-		cout << vec[i] << '\n';
-	}
-	return 0;
+    queue<int> q;
+    stack<int> s;
+    for (int i = 1; i <= n; i++)
+    {
+        int x;
+        cin >> x;
+        q.push(x);
+    }
+
+    int now = 1;
+    while (!q.empty())
+    {
+        int next = q.front();
+        
+
+        if (!s.empty())
+        {
+            if (s.top() > next)
+            {
+                cout << "NO";
+                return 0;
+            }
+            while (s.top() < next)
+            {
+                s.push(now++);
+                ans.push('+');
+            }
+        }
+        else
+        {
+            s.push(now++);
+            ans.push('+');
+            continue;
+        }
+
+        ans.push('-');
+        s.pop();
+        q.pop();
+    }
+
+    while (!ans.empty())
+    {
+        cout << ans.front() << '\n';
+        ans.pop();
+    }
+
+    return 0;
 }
+
